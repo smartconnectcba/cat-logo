@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Catálogo de aparelhos</title>
+<style>
+:root{--c:#1f6f6b;--bg:#f4f5f7;--card:#fff;--ink:#0f172a;--mut:#64748b;--line:#e5e7eb}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+button{font:inherit;color:inherit;cursor:pointer}
+.top{background:linear-gradient(135deg,var(--c),#0e7490);color:#fff;padding:18px 16px 16px;padding-top:max(18px,env(safe-area-inset-top))}
+.top .in{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:12px}
+.top img{height:52px;max-width:120px;object-fit:contain;background:#fff;border-radius:12px;padding:4px}
+.top b{display:block;font-size:20px;font-weight:800}.top small{opacity:.88;font-size:13px}
+.wrap{max-width:1100px;margin:0 auto;padding:12px 14px 110px}
+.busca{width:100%;border:1px solid var(--line);border-radius:14px;padding:12px 14px;font-size:16px;background:#fff;outline:none}
+.busca:focus{border-color:var(--c)}
+.tabs,.marcas{display:flex;gap:8px;overflow-x:auto;padding:12px 0 2px;scrollbar-width:none}.tabs::-webkit-scrollbar,.marcas::-webkit-scrollbar{display:none}
+.tab{flex:none;border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 16px;font-weight:600;font-size:14px;white-space:nowrap}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.marcas .tab{padding:6px 13px;font-size:13px}.marcas .tab.on{background:var(--c);border-color:var(--c)}
+.linha{display:flex;justify-content:space-between;align-items:center;margin:10px 2px 8px;color:var(--mut);font-size:13px}
+.linha select{border:1px solid var(--line);border-radius:10px;padding:6px 8px;background:#fff;font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media(min-width:720px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:1000px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:10px;display:flex;flex-direction:column;min-width:0}
+.ft{position:relative;aspect-ratio:1/1;border-radius:14px;background:#eef2f6;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.ft img{width:100%;height:100%;object-fit:contain}
+.ft .nav{position:absolute;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:50%;border:0;background:#ffffffe6;box-shadow:0 1px 4px #0002;font-size:17px;line-height:1;display:flex;align-items:center;justify-content:center;padding:0}
+.ft .l{left:6px}.ft .r{right:6px}
+.dots{position:absolute;bottom:7px;left:50%;transform:translateX(-50%);display:flex;gap:4px;background:#0002;padding:3px 6px;border-radius:999px}
+.dots i{width:6px;height:6px;border-radius:50%;background:#fff9}.dots i.on{background:#fff;width:14px;border-radius:3px}
+.sil{width:38%;aspect-ratio:9/18;border-radius:16px;border:5px solid #333;background:#1e293b;box-shadow:0 6px 18px #0002}
+.nm{font-weight:700;font-size:15.5px;margin:10px 2px 0;line-height:1.25}
+.sub{color:var(--mut);font-size:13px;margin:2px 2px 6px}
+.est{display:inline-block;font-size:12px;font-weight:700;border-radius:999px;padding:3px 10px;margin:0 2px 8px;align-self:flex-start}
+.e-novo{background:#dcfce7;color:#166534}.e-seminovo{background:#fef3c7;color:#92400e}.e-usado{background:#e0e7ff;color:#3730a3}
+.ap{color:var(--mut);font-size:12px;margin:0 2px}
+.pr{font-size:19px;font-weight:800;margin:0 2px}
+.pc{color:var(--mut);font-size:12.5px;margin:1px 2px 8px}
+.cores{display:flex;gap:6px;flex-wrap:wrap;margin:0 2px 10px}
+.cor{width:16px;height:16px;border-radius:50%;border:1.5px solid #0002;display:inline-block;flex:none}
+.ver{margin-top:auto;border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px;font-weight:600}
+.ver:active{background:var(--bg)}
+.vazio{text-align:center;color:var(--mut);padding:50px 10px}
+.wa{position:fixed;right:16px;bottom:max(18px,env(safe-area-inset-bottom));width:60px;height:60px;border-radius:50%;background:#25d366;border:0;box-shadow:0 6px 18px #0004;display:flex;align-items:center;justify-content:center;z-index:5}
+.wa svg{width:32px;height:32px;fill:#fff}
+.rod{color:var(--mut);font-size:13px;text-align:center;margin-top:22px;white-space:pre-line}
+/* detalhe */
+.sh{position:fixed;inset:0;background:#0008;display:flex;align-items:flex-end;justify-content:center;z-index:10}
+.sh[hidden]{display:none}
+.sh .bx{background:var(--bg);width:100%;max-width:640px;max-height:92vh;overflow:auto;border-radius:22px 22px 0 0;padding:14px 14px max(20px,env(safe-area-inset-bottom))}
+@media(min-width:700px){.sh{align-items:center}.sh .bx{border-radius:22px}}
+.sh .hd{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:10px}
+.sh .hd b{font-size:19px}.sh .x{border:0;background:#fff;border-radius:50%;width:36px;height:36px;font-size:18px;flex:none}
+.un{background:#fff;border:1px solid var(--line);border-radius:18px;padding:12px;margin-bottom:10px}
+.un.sel{border:2px solid var(--c);padding:11px}
+.fts{display:flex;gap:8px;overflow-x:auto;margin-bottom:10px;scrollbar-width:none}.fts::-webkit-scrollbar{display:none}
+.fts img{height:150px;border-radius:12px;background:#eef2f6;flex:none;object-fit:cover;max-width:80%}
+.un .t{display:flex;align-items:center;gap:8px;font-weight:700}
+.un .d{color:var(--mut);font-size:13px;margin:4px 0}
+.un .p{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:8px}
+.un .p b{font-size:20px}.un .p small{display:block;color:var(--mut);font-size:12px;font-weight:400}
+.quero{border:0;background:#25d366;color:#fff;font-weight:700;border-radius:12px;padding:11px 14px;white-space:nowrap}
+.cod{font-size:12px;color:var(--mut)}
+.zoom{position:fixed;inset:0;background:#000;z-index:20;display:flex;align-items:center;justify-content:center}
+.zoom[hidden]{display:none}.zoom img{max-width:100%;max-height:100%;object-fit:contain}
+.zoom button{position:absolute;top:max(14px,env(safe-area-inset-top));right:14px;border:0;background:#fff;border-radius:50%;width:40px;height:40px;font-size:20px}
+.load{display:flex;justify-content:center;padding:60px}.load i{width:34px;height:34px;border:4px solid #0001;border-top-color:var(--c);border-radius:50%;animation:g 1s linear infinite}
+@keyframes g{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="top"><div class="in" id="topo"><div><b>Catálogo de aparelhos</b><small>Carregando…</small></div></div></div>
+<div class="wrap">
+  <input class="busca" id="busca" type="search" placeholder="🔍 Buscar modelo (ex.: iPhone 13)" autocomplete="off">
+  <div class="tabs" id="tabs"></div>
+  <div class="marcas" id="marcas"></div>
+  <div class="linha"><span id="qtd"></span><select id="ord"><option value="r">Relevância</option><option value="m">Menor preço</option><option value="M">Maior preço</option></select></div>
+  <div class="grid" id="grid"><div class="load"><i></i></div></div>
+  <div class="rod" id="rod"></div>
+</div>
+<button class="wa" id="wa" hidden aria-label="WhatsApp"><svg viewBox="0 0 32 32"><path d="M16 3C9 3 3.3 8.6 3.3 15.6c0 2.5.7 4.8 2 6.8L3 29l6.8-2.2c1.9 1 4 1.6 6.2 1.6 7 0 12.7-5.6 12.7-12.6S23 3 16 3zm0 23c-2 0-4-.6-5.6-1.6l-.4-.2-4 1.3 1.3-3.9-.3-.4a10.3 10.3 0 0 1-1.6-5.6C5.4 9.9 10.1 5.3 16 5.3s10.6 4.6 10.6 10.3S21.8 26 16 26zm5.8-7.7c-.3-.2-1.9-.9-2.2-1-.3-.1-.5-.2-.7.2l-1 1.2c-.2.2-.4.2-.7.1-.3-.2-1.3-.5-2.5-1.6-.9-.8-1.6-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.5-.6c.2-.2.2-.4.3-.6.1-.2 0-.4 0-.6l-1-2.4c-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.1-1.2 2.8s1.2 3.2 1.4 3.4c.2.2 2.4 3.6 5.8 5 .8.4 1.4.6 1.9.7.8.3 1.6.2 2.2.1.7-.1 1.9-.8 2.2-1.5.3-.7.3-1.4.2-1.5-.1-.2-.3-.3-.6-.4z"/></svg></button>
+<div class="sh" id="sh" hidden><div class="bx" id="shb"></div></div>
+<div class="zoom" id="zoom" hidden><img id="zimg" alt=""><button id="zx" aria-label="Fechar">✕</button></div>
+<script>
+(function () {
+  var OWNER = 'smartconnectcba', REPO = 'cat-logo';
+  var RAW = 'https://raw.githubusercontent.com/' + OWNER + '/' + REPO + '/dados/';
+  var API = 'https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/dados.json?ref=dados';
+  var EST = { novo: 'Lacrado', seminovo: 'Seminovo', usado: 'Usado' }, ESTS = { novo: 'Lacrados', seminovo: 'Seminovos', usado: 'Usados' };
+  var D = null, aba = '', marca = '', grupos = [];
+  var $ = function (id) { return document.getElementById(id); };
+  var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
+  var brl = function (v) { return (Number(v) || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); };
+  var norm = function (s) { return String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); };
+  var foto = function (h) { return RAW + 'f/' + h + '.jpg'; };
+  var giga = function (g) { var m = String(g || '').match(/([\d.]+)\s*(tb|gb)/i); return m ? Number(m[1]) * (/tb/i.test(m[2]) ? 1024 : 1) : 0; };
+  var parc = function (v) { var n = D.parcelas || 0; if (n < 2 || !v) return ''; return 'ou ' + n + 'x de ' + brl(v * (1 + (Number(D.acrescimo) || 0) / 100) / n); };
+  var quando = function (t) { var m = Math.round((Date.now() - t) / 60000); return m < 1 ? 'agora' : m < 60 ? 'há ' + m + ' min' : m < 1440 ? 'há ' + Math.round(m / 60) + ' h' : new Date(t).toLocaleDateString('pt-BR'); };
+  function linkWa(txt) { var n = String(D.loja.whatsapp || '').replace(/\D/g, ''); if (n && n.length <= 11) n = '55' + n; return 'https://wa.me/' + n + '?text=' + encodeURIComponent(txt); }
+
+  function carregar(silencioso) {
+    if (!silencioso && !D) $('grid').innerHTML = '<div class="load"><i></i></div>';
+    var cache = '&_=' + Date.now();
+    return fetch(API + cache, { headers: { Accept: 'application/vnd.github.raw' }, cache: 'no-store' })
+      .then(function (r) { if (!r.ok) throw 0; return r.json(); })
+      .catch(function () { return fetch(RAW + 'dados.json?_=' + Date.now(), { cache: 'no-store' }).then(function (r) { if (!r.ok) throw 0; return r.json(); }); })
+      .then(function (d) { D = d; montar(); })
+      .catch(function () { if (!D) $('grid').innerHTML = '<div class="vazio" style="grid-column:1/-1">Não consegui carregar o catálogo agora.<br><br><button class="ver" onclick="location.reload()">Tentar de novo</button></div>'; });
+  }
+
+  function montar() {
+    if (D.cor) document.documentElement.style.setProperty('--c', D.cor);
+    document.title = (D.titulo || 'Catálogo') + ' — ' + (D.loja.nome || '');
+    $('topo').innerHTML = (D.loja.logo ? '<img src="' + foto(D.loja.logo) + '" alt="">' : '') + '<div><b>' + esc(D.loja.nome || 'Catálogo') + '</b><small>' + esc(D.titulo || 'Aparelhos disponíveis') + ' · atualizado ' + quando(D.atualizado) + '</small></div>';
+    $('wa').hidden = !D.loja.whatsapp;
+    $('rod').textContent = D.rodape || '';
+    // agrupa: modelo + estado + gigas
+    var mp = {};
+    D.itens.forEach(function (u) { var k = u.m + '|' + u.e + '|' + u.g; (mp[k] = mp[k] || { k: k, m: u.m, mc: u.mc || '', e: u.e, g: u.g, u: [] }).u.push(u); });
+    grupos = Object.keys(mp).map(function (k) { var g = mp[k]; var vs = g.u.map(function (x) { return x.v; }).filter(Boolean); g.min = vs.length ? Math.min.apply(0, vs) : 0; g.max = vs.length ? Math.max.apply(0, vs) : 0;
+      g.fotos = []; g.u.forEach(function (x) { (x.f || []).forEach(function (h) { if (g.fotos.indexOf(h) < 0 && g.fotos.length < 6) g.fotos.push(h); }); });
+      var cs = {}; g.u.forEach(function (x) { cs[x.c] = x.h; }); g.cores = Object.keys(cs).map(function (c) { return [c, cs[c]]; }); return g; });
+    var tem = {}; D.itens.forEach(function (u) { tem[u.e] = 1; });
+    if (aba && !tem[aba]) aba = '';
+    $('tabs').innerHTML = ['', 'novo', 'seminovo', 'usado'].filter(function (e) { return !e || tem[e]; }).map(function (e) { return '<button class="tab' + (aba === e ? ' on' : '') + '" data-e="' + e + '">' + (e ? ESTS[e] : 'Todos') + '</button>'; }).join('');
+    var ms = {}; D.itens.forEach(function (u) { if (u.mc) ms[u.mc] = 1; }); var lm = Object.keys(ms).sort();
+    if (marca && !ms[marca]) marca = '';
+    $('marcas').innerHTML = lm.length > 1 ? ['<button class="tab' + (!marca ? ' on' : '') + '" data-m="">Todas as marcas</button>'].concat(lm.map(function (m) { return '<button class="tab' + (marca === m ? ' on' : '') + '" data-m="' + esc(m) + '">' + esc(m) + '</button>'; })).join('') : '';
+    $('marcas').hidden = lm.length < 2;
+    desenhar();
+  }
+
+  function desenhar() {
+    var q = norm($('busca').value).split(/\s+/).filter(Boolean), o = $('ord').value;
+    var ordemE = { novo: 0, seminovo: 1, usado: 2 };
+    var r = grupos.filter(function (g) { var t = norm(g.m + ' ' + g.mc + ' ' + g.g + ' ' + g.cores.map(function (c) { return c[0]; }).join(' ')); return (!aba || g.e === aba) && (!marca || g.mc === marca) && q.every(function (w) { return t.indexOf(w) >= 0; }); });
+    r.sort(o === 'm' ? function (a, b) { return a.min - b.min; } : o === 'M' ? function (a, b) { return b.min - a.min; } : function (a, b) { return ordemE[a.e] - ordemE[b.e] || a.mc.localeCompare(b.mc) || a.m.localeCompare(b.m, 'pt-BR', { numeric: true }) || giga(a.g) - giga(b.g); });
+    var n = r.reduce(function (t, g) { return t + g.u.length; }, 0);
+    $('qtd').textContent = n + (n === 1 ? ' aparelho' : ' aparelhos');
+    if (!r.length) { $('grid').innerHTML = '<div class="vazio" style="grid-column:1/-1">' + (D.itens.length ? 'Nenhum aparelho com essa busca.' : 'Nenhum aparelho disponível no momento.<br>Chame no WhatsApp!') + '</div>'; return; }
+    $('grid').innerHTML = r.map(function (g, i) {
+      var f = g.fotos.length ? '<img src="' + foto(g.fotos[0]) + '" alt="" loading="lazy" data-i="0">' : '<span class="sil" style="border-color:' + esc(g.cores[0] ? g.cores[0][1] : '#333') + '"></span>';
+      var nav = g.fotos.length > 1 ? '<button class="nav l" data-g="' + i + '" data-d="-1">‹</button><button class="nav r" data-g="' + i + '" data-d="1">›</button><div class="dots">' + g.fotos.map(function (_, k) { return '<i class="' + (k ? '' : 'on') + '"></i>'; }).join('') + '</div>' : '';
+      return '<div class="card" data-g="' + i + '"><div class="ft">' + f + nav + '</div><div class="nm">' + esc(g.m) + '</div><div class="sub">' + esc(g.g) + ' · ' + g.cores.length + (g.cores.length === 1 ? ' cor' : ' cores') + '</div>' +
+        '<span class="est e-' + g.e + '">' + EST[g.e] + '</span>' + (g.max > g.min ? '<div class="ap">A partir de</div>' : '') + '<div class="pr">' + (g.min ? brl(g.min) : 'Consulte') + '</div><div class="pc">' + parc(g.min) + '</div>' +
+        '<div class="cores">' + g.cores.map(function (c) { return '<span class="cor" title="' + esc(c[0]) + '" style="background:' + esc(c[1]) + '"></span>'; }).join('') + '</div><button class="ver" data-v="' + i + '">Ver aparelho</button></div>';
+    }).join('');
+    $('grid').__r = r;
+  }
+
+  function detalhe(g) {
+    var us = g.u.slice().sort(function (a, b) { return a.v - b.v; });
+    $('shb').innerHTML = '<div class="hd"><div><b>' + esc(g.m) + ' ' + esc(g.g) + '</b><div class="cod"><span class="est e-' + g.e + '" style="margin:6px 0 0">' + EST[g.e] + '</span> · ' + us.length + (us.length === 1 ? ' disponível' : ' disponíveis') + '</div></div><button class="x" id="shx" aria-label="Fechar">✕</button></div>' +
+      us.map(function (u, i) {
+        var det = [u.b ? '🔋 Bateria ' + u.b + '%' : '', u.p || '', u.o || ''].filter(Boolean).map(esc).join(' · ');
+        return '<div class="un" data-u="' + i + '">' + ((u.f || []).length ? '<div class="fts">' + u.f.map(function (h) { return '<img src="' + foto(h) + '" alt="" loading="lazy" data-z="' + h + '">'; }).join('') + '</div>' : '') +
+          '<div class="t"><span class="cor" style="background:' + esc(u.h) + '"></span>' + esc(u.c || '') + ' · ' + esc(u.g) + '</div>' + (det ? '<div class="d">' + det + '</div>' : '') +
+          '<div class="p"><div><b>' + (u.v ? brl(u.v) : 'Consulte') + '</b><small>' + parc(u.v) + '</small><span class="cod">Código ' + esc(u.k) + '</span></div>' +
+          (D.loja.whatsapp ? '<button class="quero" data-q="' + i + '">💬 Quero este</button>' : '<span class="cod">Peça na loja pelo código ' + esc(u.k) + '</span>') + '</div></div>';
+      }).join('');
+    $('shb').__u = us; $('shb').__g = g;
+    $('sh').hidden = false; document.body.style.overflow = 'hidden';
+  }
+  function fechar() { $('sh').hidden = true; document.body.style.overflow = ''; }
+
+  document.addEventListener('click', function (e) {
+    var t = e.target.closest('button,img,.card');
+    if (t && t.tagName === 'IMG' && !t.dataset.z) t = t.closest('.card');
+    if (!t) { if (e.target === $('sh')) fechar(); return; }
+    if (t.dataset.e !== undefined && t.classList.contains('tab')) { aba = t.dataset.e; montar(); return; }
+    if (t.dataset.m !== undefined && t.classList.contains('tab')) { marca = t.dataset.m; montar(); return; }
+    if (t.classList.contains('nav')) { e.stopPropagation(); var g = $('grid').__r[+t.dataset.g], img = t.parentNode.querySelector('img'); var i = (+img.dataset.i + +t.dataset.d + g.fotos.length) % g.fotos.length; img.src = foto(g.fotos[i]); img.dataset.i = i; t.parentNode.querySelectorAll('.dots i').forEach(function (d, k) { d.className = k === i ? 'on' : ''; }); return; }
+    if (t.dataset.v !== undefined || t.classList.contains('card')) { var gi = t.dataset.v !== undefined ? t.dataset.v : t.dataset.g; if (gi !== undefined) detalhe($('grid').__r[+gi]); return; }
+    if (t.id === 'shx') { fechar(); return; }
+    if (t.dataset.z) { $('zimg').src = foto(t.dataset.z); $('zoom').hidden = false; return; }
+    if (t.id === 'zx') { $('zoom').hidden = true; return; }
+    if (t.dataset.q !== undefined) { var u = $('shb').__u[+t.dataset.q];
+      document.querySelectorAll('.un').forEach(function (x) { x.classList.toggle('sel', x.dataset.u === t.dataset.q); });
+      var txt = 'Olá! Vi no catálogo e quero este aparelho:\n📱 ' + u.m + ' ' + u.g + (u.c ? ' ' + u.c : '') + '\n' + EST[u.e] + (u.b ? ' · bateria ' + u.b + '%' : '') + '\nValor: ' + (u.v ? brl(u.v) : 'a consultar') + '\nCódigo: ' + u.k;
+      window.open(linkWa(txt), '_blank'); return; }
+    if (t.id === 'wa') { window.open(linkWa('Olá! Vi o catálogo de aparelhos e quero mais informações.'), '_blank'); }
+  });
+  $('busca').addEventListener('input', function () { if (D) desenhar(); });
+  $('ord').addEventListener('change', function () { if (D) desenhar(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { $('zoom').hidden = true; fechar(); } });
+  // sempre o estoque atual: recarrega ao voltar para a página e a cada minuto
+  document.addEventListener('visibilitychange', function () { if (!document.hidden) carregar(true); });
+  setInterval(function () { if (!document.hidden && $('sh').hidden) carregar(true); }, 60000);
+  carregar();
+})();
+</script>
+</body>
+</html>
