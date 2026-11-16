@@ -48,6 +48,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .vazio{text-align:center;color:var(--mut);padding:50px 10px}
 .wa{position:fixed;right:16px;bottom:max(18px,env(safe-area-inset-bottom));width:60px;height:60px;border-radius:50%;background:#25d366;border:0;box-shadow:0 6px 18px #0004;display:flex;align-items:center;justify-content:center;z-index:5}
 .wa svg{width:32px;height:32px;fill:#fff}
+  .atac{background:#fff;color:#0e7490;border-radius:999px;padding:2px 10px;font-size:13px;font-weight:800;vertical-align:middle;margin-left:6px}
 .rod{color:var(--mut);font-size:13px;text-align:center;margin-top:22px;white-space:pre-line}
 /* detalhe */
 .sh{position:fixed;inset:0;background:#0008;display:flex;align-items:flex-end;justify-content:center;z-index:10}
@@ -90,7 +91,10 @@ button{font:inherit;color:inherit;cursor:pointer}
 (function () {
   var OWNER = 'smartconnectcba', REPO = 'cat-logo';
   var RAW = 'https://raw.githubusercontent.com/' + OWNER + '/' + REPO + '/dados/';
-  var API = 'https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/dados.json?ref=dados';
+  // link de atacado: ?l=<chave> → lê a lista de atacado (arquivo com nome secreto); sem isso, preços de varejo
+  var CHAVE = (new URLSearchParams(location.search).get('l') || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+  var ARQ = CHAVE ? 'a-' + CHAVE + '.json' : 'dados.json';
+  var API = 'https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' + ARQ + '?ref=dados';
   var EST = { novo: 'Lacrado', seminovo: 'Seminovo', usado: 'Usado' }, ESTS = { novo: 'Lacrados', seminovo: 'Seminovos', usado: 'Usados' };
   var D = null, aba = '', marca = '', grupos = [];
   var $ = function (id) { return document.getElementById(id); };
@@ -108,15 +112,15 @@ button{font:inherit;color:inherit;cursor:pointer}
     var cache = '&_=' + Date.now();
     return fetch(API + cache, { headers: { Accept: 'application/vnd.github.raw' }, cache: 'no-store' })
       .then(function (r) { if (!r.ok) throw 0; return r.json(); })
-      .catch(function () { return fetch(RAW + 'dados.json?_=' + Date.now(), { cache: 'no-store' }).then(function (r) { if (!r.ok) throw 0; return r.json(); }); })
+      .catch(function () { return fetch(RAW + ARQ + '?_=' + Date.now(), { cache: 'no-store' }).then(function (r) { if (!r.ok) throw 0; return r.json(); }); })
       .then(function (d) { D = d; montar(); })
-      .catch(function () { if (!D) $('grid').innerHTML = '<div class="vazio" style="grid-column:1/-1">Não consegui carregar o catálogo agora.<br><br><button class="ver" onclick="location.reload()">Tentar de novo</button></div>'; });
+      .catch(function () { if (!D) $('grid').innerHTML = '<div class="vazio" style="grid-column:1/-1">' + (CHAVE ? 'Este link de atacado não é válido. Peça um link novo para a loja.' : 'Não consegui carregar o catálogo agora.') + '<br><br><button class="ver" onclick="location.reload()">Tentar de novo</button></div>'; });
   }
 
   function montar() {
     if (D.cor) document.documentElement.style.setProperty('--c', D.cor);
     document.title = (D.titulo || 'Catálogo') + ' — ' + (D.loja.nome || '');
-    $('topo').innerHTML = (D.loja.logo ? '<img src="' + foto(D.loja.logo) + '" alt="">' : '') + '<div><b>' + esc(D.loja.nome || 'Catálogo') + '</b><small>' + esc(D.titulo || 'Aparelhos disponíveis') + ' · atualizado ' + quando(D.atualizado) + '</small></div>';
+    $('topo').innerHTML = (D.loja.logo ? '<img src="' + foto(D.loja.logo) + '" alt="">' : '') + '<div><b>' + esc(D.loja.nome || 'Catálogo') + (D.atacado ? ' <span class="atac">🏷️ ATACADO</span>' : '') + '</b><small>' + esc(D.titulo || 'Aparelhos disponíveis') + ' · atualizado ' + quando(D.atualizado) + '</small></div>';
     $('wa').hidden = !D.loja.whatsapp;
     $('rod').textContent = D.rodape || '';
     // agrupa: modelo + estado + gigas
@@ -181,7 +185,7 @@ button{font:inherit;color:inherit;cursor:pointer}
     if (t.id === 'zx') { $('zoom').hidden = true; return; }
     if (t.dataset.q !== undefined) { var u = $('shb').__u[+t.dataset.q];
       document.querySelectorAll('.un').forEach(function (x) { x.classList.toggle('sel', x.dataset.u === t.dataset.q); });
-      var txt = 'Olá! Vi no catálogo e quero este aparelho:\n📱 ' + u.m + ' ' + u.g + (u.c ? ' ' + u.c : '') + '\n' + EST[u.e] + (u.b ? ' · bateria ' + u.b + '%' : '') + '\nValor: ' + (u.v ? brl(u.v) : 'a consultar') + '\nCódigo: ' + u.k;
+      var txt = 'Olá! Vi no catálogo' + (D.atacado ? ' de ATACADO' : '') + ' e quero este aparelho:\n📱 ' + u.m + ' ' + u.g + (u.c ? ' ' + u.c : '') + '\n' + EST[u.e] + (u.b ? ' · bateria ' + u.b + '%' : '') + '\nValor: ' + (u.v ? brl(u.v) : 'a consultar') + '\nCódigo: ' + u.k;
       window.open(linkWa(txt), '_blank'); return; }
     if (t.id === 'wa') { window.open(linkWa('Olá! Vi o catálogo de aparelhos e quero mais informações.'), '_blank'); }
   });
